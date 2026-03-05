@@ -788,9 +788,22 @@ function renderFeed() {
             <div class="avatar" style="background: ${getAvatarGradient(STATE.user?.avatar)}">${STATE.user?.avatar || 'U'}</div>
             <div class="compose-input">
               <textarea class="compose-textarea" id="compose-text" placeholder="What's on your mind? Share it with the cosmos..."></textarea>
+              
+
+
+<div class="compose-input">
+    <div id="image-preview-wrapper" style="display: none; margin: 10px 0; position: relative; border-radius: var(--radius-md); overflow: hidden; border: 1px solid rgba(151, 125, 255, 0.3);">
+        <img id="image-preview" src="" style="width: 100%; max-height: 300px; object-fit: cover; display: block;">
+        <button id="remove-img-btn" style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; font-weight: bold;">✕</button>
+    </div>
+
+    <input type="file" id="post-image-input" accept="image/*" style="display: none;">
+
+</div>
+
               <div class="compose-actions">
                 <div class="compose-tools">
-                  <button class="compose-tool-btn" title="Image">🖼️</button>
+                <button class="compose-tool-btn" id="trigger-img-upload" title="Upload Image">🖼️</button>
                   <button class="compose-tool-btn" title="GIF">🎞️</button>
                   <button class="compose-tool-btn" title="Poll">📊</button>
                   <button class="compose-tool-btn" title="Emoji">😊</button>
@@ -947,6 +960,37 @@ function initFeed() {
   });
 
   
+// initFeed() ke andar ye logic add karein:
+const imgTrigger = document.querySelector('#trigger-img-upload');
+const imgInput = document.querySelector('#post-image-input');
+const previewWrapper = document.querySelector('#image-preview-wrapper');
+const previewImg = document.querySelector('#image-preview');
+const removeBtn = document.querySelector('#remove-img-btn');
+
+if (imgTrigger && imgInput) {
+    imgTrigger.addEventListener('click', () => imgInput.click());
+
+    imgInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                previewImg.src = event.target.result;
+                previewWrapper.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    removeBtn.addEventListener('click', () => {
+        imgInput.value = '';
+        previewWrapper.style.display = 'none';
+        previewImg.src = '';
+    });
+}
+
+
+
 
   // Feed tabs
   $$('.feed-tab').forEach(tab => {
