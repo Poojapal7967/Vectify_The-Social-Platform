@@ -736,6 +736,7 @@ function renderFeed() {
           <button class="nav-item" data-page="notifications" id="nav-notifications">
             <span class="nav-icon">🔔</span>
             <span class="nav-label">Notifications</span>
+            <span class="notification-badge-dot"></span>
           </button>
           <button class="nav-item" data-page="messages" id="nav-messages">
             <span class="nav-icon">✉️</span>
@@ -766,11 +767,20 @@ function renderFeed() {
         <div class="feed-header">
           <h1>Home</h1>
         </div>
-
+ 
+<div class="search-container glass slide-up" style="margin: 20px 24px 0; padding: 10px; border-radius: var(--radius-md);">
+    <div style="position: relative; display: flex; align-items: center;">
+        <span style="position: absolute; left: 15px; font-size: 1.2rem; pointer-events: none;">🔍</span>
+        <input type="text" id="global-search" class="input-field" 
+               placeholder="Search orbits, authors, or #hashtags..." 
+               style="padding-left: 45px; width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1);">
+    </div>
+</div>
         <div class="feed-tabs">
           <button class="feed-tab active" data-tab="foryou" id="tab-foryou">For You</button>
           <button class="feed-tab" data-tab="following" id="tab-following">Following</button>
           <button class="feed-tab" data-tab="trending" id="tab-trending">Trending</button>
+          
         </div>
 
         ${!isAnonymous ? `
@@ -935,6 +945,8 @@ function initFeed() {
       showToast(`${item.querySelector('.nav-label')?.textContent || 'Page'} — Coming soon! 🚧`, 'info');
     });
   });
+
+  
 
   // Feed tabs
   $$('.feed-tab').forEach(tab => {
