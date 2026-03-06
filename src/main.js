@@ -860,6 +860,119 @@ function renderFeed() {
     </div>
   `;
 }
+// main.js -> Line 862 ke niche paste karein
+function renderMessagesPage() {
+    return `
+        <div class="messages-container slide-up">
+            <header class="messages-header">
+                <div class="header-top">
+                    <h2>Messages</h2>
+                    <button class="icon-btn">📝</button>
+                </div>
+                <div class="search-bar-mini glass">
+                    <span>🔍</span>
+                    <input type="text" placeholder="Search messages...">
+                </div>
+            </header>
+
+            <div class="notes-row">
+                <div class="note-item">
+                    <div class="note-avatar your-note">
+                        <div class="note-bubble">Your note</div>
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Aman" alt="Me">
+                    </div>
+                    <span>Your note</span>
+                </div>
+                ${['Ram', 'Sneha', 'Litesh'].map(name => `
+                    <div class="note-item">
+                        <div class="note-avatar has-story">
+                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=${name}" alt="${name}">
+                        </div>
+                        <span>${name}</span>
+                    </div>
+                `).join('')}
+            </div>
+
+            <div class="chat-list">
+                <div class="chat-item unread">
+                    <div class="avatar">RP</div>
+                    <div class="chat-info">
+                        <span class="chat-name">Ramveer Pal</span>
+                        <span class="chat-msg">Sent a reel by career_path • 2h</span>
+                    </div>
+                    <button class="camera-btn">📷</button>
+                </div>
+                <div class="chat-item">
+                    <div class="avatar" style="background: var(--gradient-brand);">B</div>
+                    <div class="chat-info">
+                        <span class="chat-name">Bhoomii</span>
+                        <span class="chat-msg">Sent a reel by lonelyl0 • 3d</span>
+                    </div>
+                    <button class="camera-btn">📷</button>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function renderProfilePage() {
+    // User data placeholder
+    const user = {
+        name: 'Returning User',
+        handle: '@returning_user',
+        avatar: 'R',
+        bio: 'Cosmic Explorer 🚀 | UI/UX Enthusiast | Building the future of Vaktify.',
+        posts: 42,
+        followers: '1.2K',
+        following: 560
+    };
+
+    return `
+        <div class="profile-container slide-up">
+            <header class="profile-header glass">
+                <div class="profile-avatar-section">
+                    <div class="avatar avatar-xl" style="background: var(--gradient-brand); font-size: 2.5rem;">${user.avatar}</div>
+                </div>
+                
+                <section class="profile-info">
+                    <div class="profile-title-row">
+                        <h2 class="profile-handle">${user.handle.replace('@', '')}</h2>
+                        <button class="btn btn-secondary btn-sm">Edit Profile</button>
+                        <button class="btn btn-ghost">⚙️</button>
+                    </div>
+                    
+                    <div class="profile-stats">
+                        <span><strong>${user.posts}</strong> posts</span>
+                        <span><strong>${user.followers}</strong> followers</span>
+                        <span><strong>${user.following}</strong> following</span>
+                    </div>
+                    
+                    <div class="profile-bio-content">
+                        <span class="profile-full-name">${user.name}</span>
+                        <p class="bio-text">${user.bio}</p>
+                    </div>
+                </section>
+            </header>
+
+            <div class="profile-tabs-nav">
+                <button class="profile-tab active">🔳 POSTS</button>
+                <button class="profile-tab">🎬 REELS</button>
+                <button class="profile-tab">🏷️ TAGGED</button>
+            </div>
+
+            <div class="posts-grid-layout">
+                ${[1, 2, 3, 4, 5, 6].map(i => `
+                    <div class="grid-post-item glass">
+                        <div class="post-overlay">
+                            <span>❤️ 150</span>
+                            <span>💬 24</span>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    `;
+}
 
 function renderPosts() {
   const isAnonymous = STATE.user?.userType === 'anonymous';
