@@ -13,5 +13,18 @@
 <body>
   <div id="app"></div>
   <script type="module" src="/src/main.js"></script>
+  <div class="drawer-overlay" id="commentOverlay"></div>
+    <div class="comment-drawer" id="commentDrawer">
+        <div class="drawer-header">
+            <h3 style="color: white; margin: 0;">Cosmic Conversations 💬</h3>
+            <button onclick="closeCommentDrawer()" style="background:none; border:none; font-size:1.5rem; color:white; cursor:pointer;">✕</button>
+        </div>
+        <div id="drawer-content" style="overflow-y: auto; flex-grow: 1; padding: 10px 0;">
+            </div>
+        <div class="drawer-input-area" style="padding: 15px 0; border-top: 1px solid rgba(255,255,255,0.1);">
+            <input type="text" id="drawerInput" placeholder="Add to the orbit..." 
+                   style="width: 100%; padding: 12px; border-radius: 15px; border: none; background: rgba(255,255,255,0.1); color: white; outline: none;">
+        </div>
+    </div>
 </body>
 </html>
