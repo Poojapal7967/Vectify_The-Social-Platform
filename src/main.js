@@ -1153,6 +1153,42 @@ function bindPostActions() {
     });
   });
 
+
+
+  // Double Tap to Like (Paste here at Line 1155)
+$$('.post-card').forEach(card => {
+    card.addEventListener('dblclick', (e) => {
+        const id = parseInt(card.dataset.postId);
+        const post = STATE.posts.find(p => p.id === id);
+        
+        if (post && !post.liked) {
+            post.liked = true;
+            post.likes++;
+            
+            // UI Update: Like button aur count ko update karein
+            const likeBtn = card.querySelector('[data-action="like"]');
+            const likeCount = card.querySelector(`#like-count-${id}`);
+            
+            if (likeBtn) {
+                likeBtn.classList.add('active');
+                likeBtn.querySelector('.action-icon').textContent = '❤️';
+            }
+            if (likeCount) likeCount.textContent = formatNumber(post.likes);
+        }
+
+        // Cosmic Heart Animation dikhayein
+        const heart = document.createElement('div');
+        heart.className = 'heart-animation animate-heart';
+        heart.innerHTML = '❤️';
+        card.style.position = 'relative'; 
+        card.appendChild(heart);
+
+        // Animation khatam hote hi remove karein
+        setTimeout(() => heart.remove(), 800);
+    });
+});
+
+
   // Share
   $$('[data-action="share"]').forEach(btn => {
     btn.addEventListener('click', (e) => {
