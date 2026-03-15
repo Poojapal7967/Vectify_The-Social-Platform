@@ -1155,7 +1155,7 @@ function bindPostActions() {
 
 
 
-  // Double Tap to Like (Paste here at Line 1155)
+  // Double Tap to Like 
 $$('.post-card').forEach(card => {
     card.addEventListener('dblclick', (e) => {
         const id = parseInt(card.dataset.postId);
@@ -1176,6 +1176,8 @@ $$('.post-card').forEach(card => {
             if (likeCount) likeCount.textContent = formatNumber(post.likes);
         }
 
+
+
         // Cosmic Heart Animation dikhayein
         const heart = document.createElement('div');
         heart.className = 'heart-animation animate-heart';
@@ -1188,6 +1190,27 @@ $$('.post-card').forEach(card => {
     });
 });
 
+// Delete Post Logic
+$$('[data-action="delete"]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = parseInt(btn.dataset.id);
+        
+        if (confirm('Kya aap is post ko orbit se hatana chahte hain?')) {
+            const postEl = document.querySelector(`#post-${id}`);
+            
+            // 1. Animation add karein
+            postEl.classList.add('post-exit');
+            
+            // 2. 400ms baad remove karein (css transition ke baad)
+            setTimeout(() => {
+                STATE.posts = STATE.posts.filter(p => p.id !== id);
+                postEl.remove();
+                showToast('Post deleted from the orbit! 🚀', 'info');
+            }, 400);
+        }
+    });
+});
 
   // Share
   $$('[data-action="share"]').forEach(btn => {
