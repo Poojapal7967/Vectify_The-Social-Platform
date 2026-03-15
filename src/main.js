@@ -1072,6 +1072,26 @@ if (imgTrigger && imgInput) {
 
   bindPostActions();
 }
+// Comment Drawer logic
+window.openCommentDrawer = function(postId) {
+    const drawer = document.getElementById('commentDrawer');
+    const overlay = document.getElementById('commentOverlay');
+    const content = document.getElementById('drawer-content');
+    
+    const post = STATE.posts.find(p => p.id === postId);
+    if (!post) return;
+    
+    // Comments load karein
+    content.innerHTML = renderComments(post.commentList);
+    
+    drawer.classList.add('open');
+    overlay.style.display = 'block';
+};
+
+window.closeCommentDrawer = function() {
+    document.getElementById('commentDrawer').classList.remove('open');
+    document.getElementById('commentOverlay').style.display = 'none';
+};
 
 function bindPostActions() {
   const isAnonymous = STATE.user?.userType === 'anonymous';
@@ -1113,7 +1133,17 @@ function bindPostActions() {
 
         const voteCount = $(`#vote-count-${id}`);
         if (voteCount) voteCount.textContent = formatNumber(post.upvotes);
+// Comment icon 
+$$('[data-action="comment"]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        e.stopPropagation(); 
+        const id = parseInt(btn.dataset.id);
+        window.openCommentDrawer(id);
+    });
+});
 
+
+document.getElementById('commentOverlay')?.addEventListener('click', window.closeCommentDrawer);
 // Update button styles correctly
         const postEl = document.querySelector(`#post-${id}`);
         if (postEl) {
