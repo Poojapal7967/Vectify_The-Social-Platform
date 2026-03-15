@@ -2163,3 +2163,29 @@ textarea.input-field {
 }
 
 .grid-post-item:hover .post-overlay { opacity: 1; }
+
+
+
+
+/* Double Tap Heart Animation */
+.heart-animation {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    font-size: 80px;
+    color: white;
+    text-shadow: 0 0 20px rgba(151, 125, 255, 0.8);
+    pointer-events: none;
+    z-index: 10;
+}
+
+@keyframes heartFade {
+    0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+    50% { transform: translate(-50%, -50%) scale(1.5); opacity: 0.9; }
+    100% { transform: translate(-50%, -50%) scale(1.2); opacity: 0; }
+}
+
+.animate-heart {
+    animation: heartFade 0.8s ease-out forwards;
+}
