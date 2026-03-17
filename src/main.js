@@ -10,6 +10,8 @@ const STATE = {
   user: null,
   posts: [],
   contacts: [],
+  followingHandles: [],
+  feedTab: 'foryou',
   mascotStep: 0,
 };
 
@@ -180,6 +182,7 @@ const SUGGESTIONS = [
   { name: 'Meera Joshi', handle: '@meera_j', avatar: 'M' },
   { name: 'Rohit Verma', handle: '@rohit_v', avatar: 'R' },
 ];
+const VALID_FEED_TABS = ['foryou', 'following', 'trending'];
 
 // ─── Utility ──────────────────────────────────────
 function $(selector) { return document.querySelector(selector); }
@@ -725,6 +728,15 @@ function initInvite() {
 // ═══════════════════════════════════════════════════
 function renderFeed() {
   STATE.posts = JSON.parse(JSON.stringify(MOCK_POSTS));
+  if (!VALID_FEED_TABS.includes(STATE.feedTab)) {
+    STATE.feedTab = 'foryou';
+  }
+  if (!STATE.followingHandles.length) {
+    STATE.followingHandles = STATE.contacts
+      .filter(c => c.invited)
+      .map(c => c.handle || c.username)
+      .filter(Boolean);
+  }
   const isAnonymous = STATE.user?.userType === 'anonymous';
 
   return `
@@ -791,9 +803,9 @@ function renderFeed() {
     </div>
 </div>
         <div class="feed-tabs">
-          <button class="feed-tab active" data-tab="foryou" id="tab-foryou">For You</button>
-          <button class="feed-tab" data-tab="following" id="tab-following">Following</button>
-          <button class="feed-tab" data-tab="trending" id="tab-trending">Trending</button>
+          <button class="feed-tab ${STATE.feedTab === 'foryou' ? 'active' : ''}" data-tab="foryou" id="tab-foryou">For You</button>
+          <button class="feed-tab ${STATE.feedTab === 'following' ? 'active' : ''}" data-tab="following" id="tab-following">Following</button>
+          <button class="feed-tab ${STATE.feedTab === 'trending' ? 'active' : ''}" data-tab="trending" id="tab-trending">Trending</button>
           
         </div>
 
@@ -835,7 +847,7 @@ function renderFeed() {
         `}
 
         <div id="posts-container">
-          ${renderPosts()}
+          ${renderPosts(getFeedPostsByTab())}
         </div>
       </main>
 
@@ -854,16 +866,21 @@ function renderFeed() {
 
         <div class="who-to-follow glass" style="border-radius: var(--radius-lg); padding: 20px; margin-bottom: 16px;">
           <h3>✨ Who to Follow</h3>
-          ${SUGGESTIONS.map(s => `
+          ${SUGGESTIONS.map(s => {
+            const isFollowing = STATE.followingHandles.includes(s.handle);
+            return `
             <div class="follow-suggestion">
               <div class="avatar avatar-sm" style="background: ${getAvatarGradient(s.avatar)}">${s.avatar}</div>
               <div class="follow-info">
                 <div class="follow-name">${s.name}</div>
                 <div class="follow-handle">${s.handle}</div>
               </div>
-              <button class="follow-btn">Follow</button>
+              <button class="follow-btn ${isFollowing ? 'following' : ''}" data-handle="${s.handle}">
+                ${isFollowing ? 'Following' : 'Follow'}
+              </button>
             </div>
-          `).join('')}
+          `;
+          }).join('')}
         </div>
 
         <div style="padding: 12px; font-size: 0.75rem; color: var(--text-muted); line-height: 1.6;">
@@ -876,10 +893,36 @@ function renderFeed() {
 }
 
 
-function renderPosts() {
-  const isAnonymous = STATE.user?.userType === 'anonymous';
+function getFeedPostsByTab() {
+  if (STATE.feedTab === 'following') {
+    return STATE.posts.filter(post =>
+      post.userType !== 'anonymous' && STATE.followingHandles.includes(post.handle)
+    );
+  }
 
-  return STATE.posts.map(post => `
+  if (STATE.feedTab === 'trending') {
+    return [...STATE.posts].sort((a, b) => b.likes - a.likes);
+  }
+
+  return STATE.posts;
+}
+
+function renderPosts(posts = STATE.posts) {
+  const isAnonymous = STATE.user?.userType === 'anonymous';
+  if (!posts.length) {
+    const tabMessage = STATE.feedTab === 'following'
+      ? 'Follow creators to populate your Following feed ✨'
+      : STATE.feedTab === 'trending'
+        ? 'No trending posts available right now. Check back in a bit 🔥'
+        : 'No posts in your feed yet. Start the conversation 🚀';
+    return `
+      <div style="padding: 28px 24px; color: var(--text-secondary); text-align: center;">
+        ${tabMessage}
+      </div>
+    `;
+  }
+
+  return posts.map(post => `
     <div class="post-card" data-post-id="${post.id}" id="post-${post.id}">
       <div class="post-header">
         <div class="vote-column">
@@ -1012,6 +1055,9 @@ if (imgTrigger && imgInput) {
     tab.addEventListener('click', () => {
       $$('.feed-tab').forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
+      STATE.feedTab = tab.dataset.tab;
+      $('#posts-container').innerHTML = renderPosts(getFeedPostsByTab());
+      bindPostActions();
     });
   });
 
@@ -1048,7 +1094,7 @@ if (imgTrigger && imgInput) {
 
       STATE.posts.unshift(newPost);
       textarea.value = '';
-      $('#posts-container').innerHTML = renderPosts();
+      $('#posts-container').innerHTML = renderPosts(getFeedPostsByTab());
       bindPostActions();
       showToast('Posted successfully! 🚀');
     });
@@ -1057,15 +1103,22 @@ if (imgTrigger && imgInput) {
   // Follow buttons
   $$('.follow-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      if (btn.textContent === 'Follow') {
+      const handle = btn.dataset.handle;
+      const isFollowing = STATE.followingHandles.includes(handle);
+      if (!isFollowing) {
+        STATE.followingHandles.push(handle);
         btn.textContent = 'Following';
-        btn.style.background = 'var(--accent-primary)';
-        btn.style.color = 'white';
+        btn.classList.add('following');
         showToast('Followed! ✨');
       } else {
+        STATE.followingHandles = STATE.followingHandles.filter(h => h !== handle);
         btn.textContent = 'Follow';
-        btn.style.background = 'white';
-        btn.style.color = 'var(--bg-primary)';
+        btn.classList.remove('following');
+      }
+
+      if (STATE.feedTab === 'following') {
+        $('#posts-container').innerHTML = renderPosts(getFeedPostsByTab());
+        bindPostActions();
       }
     });
   });

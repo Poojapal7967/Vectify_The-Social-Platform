@@ -1720,6 +1720,11 @@ textarea.input-field {
   transform: scale(1.03);
 }
 
+.follow-btn.following {
+  background: var(--accent-primary);
+  color: white;
+}
+
 /* ---------- Comment Section ---------- */
 .comment-section {
   padding: 0 24px 24px;
