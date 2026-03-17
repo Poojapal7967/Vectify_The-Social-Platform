@@ -4,12 +4,12 @@
 
 **A next-gen social platform blending the best of Twitter & Reddit with a cosmic space theme.**
 
-[![Deploy to GitHub Pages](https://github.com/Amanbundela75/Vectify_The-Social-Platform/actions/workflows/deploy.yml/badge.svg)](https://github.com/Amanbundela75/Vectify_The-Social-Platform/actions/workflows/deploy.yml)
+[![Deploy to GitHub Pages](https://github.com/Poojapal7967/Vectify_The-Social-Platform/actions/workflows/deploy.yml/badge.svg)](https://github.com/Poojapal7967/Vectify_The-Social-Platform/actions/workflows/deploy.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Vite](https://img.shields.io/badge/Vite-7.3-646CFF?logo=vite&logoColor=white)](https://vite.dev/)
 [![JavaScript](https://img.shields.io/badge/Vanilla_JS-ES2024-F7DF1E?logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 
-[🌐 Live Demo](https://amanbundela75.github.io/Vectify_The-Social-Platform/) · [🐛 Report Bug](https://github.com/Amanbundela75/Vectify_The-Social-Platform/issues) · [✨ Request Feature](https://github.com/Amanbundela75/Vectify_The-Social-Platform/issues)
+[🌐 Live Demo](https://poojapal7967.github.io/Vectify_The-Social-Platform/) · [🐛 Report Bug](https://github.com/Poojapal7967/Vectify_The-Social-Platform/issues) · [✨ Request Feature](https://github.com/Poojapal7967/Vectify_The-Social-Platform/issues)
 
 </div>
 
@@ -85,7 +85,7 @@ Vectify is a **cosmic-themed social platform** that combines the best aspects of
 
 ```bash
 # Clone the repository
-git clone https://github.com/Amanbundela75/Vectify_The-Social-Platform.git
+git clone https://github.com/Poojapal7967/Vectify_The-Social-Platform.git
 
 # Navigate to project directory
 cd Vectify_The-Social-Platform
@@ -124,7 +124,7 @@ Vectify is configured for **automatic deployment** to GitHub Pages using GitHub 
 1. Every push to the `main` branch triggers the deployment workflow
 2. GitHub Actions builds the project with Vite
 3. The `dist/` output is deployed to GitHub Pages
-4. The site is live at: **https://amanbundela75.github.io/Vectify_The-Social-Platform/**
+4. The site is live at: **https://poojapal7967.github.io/Vectify_The-Social-Platform/**
 
 ### Manual Deployment
 
