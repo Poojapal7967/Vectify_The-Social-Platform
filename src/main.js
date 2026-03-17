@@ -182,6 +182,7 @@ const SUGGESTIONS = [
   { name: 'Meera Joshi', handle: '@meera_j', avatar: 'M' },
   { name: 'Rohit Verma', handle: '@rohit_v', avatar: 'R' },
 ];
+const VALID_FEED_TABS = ['foryou', 'following', 'trending'];
 
 // ─── Utility ──────────────────────────────────────
 function $(selector) { return document.querySelector(selector); }
@@ -727,11 +728,14 @@ function initInvite() {
 // ═══════════════════════════════════════════════════
 function renderFeed() {
   STATE.posts = JSON.parse(JSON.stringify(MOCK_POSTS));
-  if (!['foryou', 'following', 'trending'].includes(STATE.feedTab)) {
+  if (!VALID_FEED_TABS.includes(STATE.feedTab)) {
     STATE.feedTab = 'foryou';
   }
   if (!STATE.followingHandles.length) {
-    STATE.followingHandles = STATE.contacts.filter(c => c.invited).map(c => c.username);
+    STATE.followingHandles = STATE.contacts
+      .filter(c => c.invited)
+      .map(c => c.handle || c.username)
+      .filter(Boolean);
   }
   const isAnonymous = STATE.user?.userType === 'anonymous';
 
@@ -862,18 +866,21 @@ function renderFeed() {
 
         <div class="who-to-follow glass" style="border-radius: var(--radius-lg); padding: 20px; margin-bottom: 16px;">
           <h3>✨ Who to Follow</h3>
-          ${SUGGESTIONS.map(s => `
+          ${SUGGESTIONS.map(s => {
+            const isFollowing = STATE.followingHandles.includes(s.handle);
+            return `
             <div class="follow-suggestion">
               <div class="avatar avatar-sm" style="background: ${getAvatarGradient(s.avatar)}">${s.avatar}</div>
               <div class="follow-info">
                 <div class="follow-name">${s.name}</div>
                 <div class="follow-handle">${s.handle}</div>
               </div>
-              <button class="follow-btn ${STATE.followingHandles.includes(s.handle) ? 'following' : ''}" data-handle="${s.handle}" style="${STATE.followingHandles.includes(s.handle) ? 'background: var(--accent-primary); color: white;' : ''}">
-                ${STATE.followingHandles.includes(s.handle) ? 'Following' : 'Follow'}
+              <button class="follow-btn ${isFollowing ? 'following' : ''}" data-handle="${s.handle}">
+                ${isFollowing ? 'Following' : 'Follow'}
               </button>
             </div>
-          `).join('')}
+          `;
+          }).join('')}
         </div>
 
         <div style="padding: 12px; font-size: 0.75rem; color: var(--text-muted); line-height: 1.6;">
@@ -903,9 +910,14 @@ function getFeedPostsByTab() {
 function renderPosts(posts = STATE.posts) {
   const isAnonymous = STATE.user?.userType === 'anonymous';
   if (!posts.length) {
+    const tabMessage = STATE.feedTab === 'following'
+      ? 'Follow creators to populate your Following feed ✨'
+      : STATE.feedTab === 'trending'
+        ? 'No trending posts available right now. Check back in a bit 🔥'
+        : 'No posts in your feed yet. Start the conversation 🚀';
     return `
       <div style="padding: 28px 24px; color: var(--text-secondary); text-align: center;">
-        No posts yet in this tab. Follow creators to populate your Following feed ✨
+        ${tabMessage}
       </div>
     `;
   }
@@ -1097,15 +1109,11 @@ if (imgTrigger && imgInput) {
         STATE.followingHandles.push(handle);
         btn.textContent = 'Following';
         btn.classList.add('following');
-        btn.style.background = 'var(--accent-primary)';
-        btn.style.color = 'white';
         showToast('Followed! ✨');
       } else {
         STATE.followingHandles = STATE.followingHandles.filter(h => h !== handle);
         btn.textContent = 'Follow';
         btn.classList.remove('following');
-        btn.style.background = '';
-        btn.style.color = '';
       }
 
       if (STATE.feedTab === 'following') {
