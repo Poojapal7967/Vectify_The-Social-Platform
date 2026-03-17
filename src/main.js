@@ -1,5 +1,5 @@
 // ==================================================
-//  VAKTIFY — Social Networking Application
+//  VECTIFY — Social Networking Application
 //  A cosmic fusion of Twitter meets Reddit
 // ==================================================
 import './style.css';
@@ -323,7 +323,7 @@ function renderLanding() {
       <nav class="landing-nav fade-in">
         <div class="logo">
           <div class="logo-icon">V</div>
-          <span class="logo-text">Vaktify</span>
+          <span class="logo-text">Vectify</span>
         </div>
         <div style="display: flex; gap: 12px;">
           <button class="btn btn-ghost" id="btn-login">Log In</button>
@@ -364,7 +364,7 @@ function renderLanding() {
       </div>
     </div>
 
-    ${renderMascot('Hey there! 👋 Welcome to Vaktify! Tap "Join the Orbit" to start your cosmic journey! 🌟', 'right')}
+    ${renderMascot('Hey there! 👋 Welcome to Vectify! Tap "Join the Orbit" to start your cosmic journey! 🌟', 'right')}
   `;
 }
 
@@ -395,7 +395,7 @@ function showAuthModal(mode = 'signup') {
   overlay.innerHTML = `
     <div class="modal glass" style="position: relative;">
       <button class="modal-close" id="modal-close">✕</button>
-      <h2>${isSignup ? '🚀 Join Vaktify' : '👋 Welcome Back'}</h2>
+      <h2>${isSignup ? '🚀 Join Vectify' : '👋 Welcome Back'}</h2>
       <p>${isSignup ? 'Start your cosmic social journey' : 'Log back into your orbit'}</p>
 
       ${isSignup ? `
@@ -516,7 +516,7 @@ function showAuthModal(mode = 'signup') {
     }
 
     overlay.remove();
-    showToast(`Welcome to Vaktify, ${STATE.user.name}! 🌟`);
+    showToast(`Welcome to Vectify, ${STATE.user.name}! 🌟`);
 
     if (isSignup) {
       navigate('profile-setup');
@@ -620,7 +620,7 @@ function renderInvite() {
     <div class="invite-page">
       <div class="invite-card glass slide-up">
         <h1>📬 Invite Your Crew</h1>
-        <p>Bring your friends into the orbit! Send them an invite to Vaktify.</p>
+        <p>Bring your friends into the orbit! Send them an invite to Vectify.</p>
 
         <div class="invite-search">
           <span class="search-icon">🔍</span>
@@ -735,7 +735,7 @@ function renderFeed() {
       <aside class="sidebar">
         <div class="logo">
           <div class="logo-icon">V</div>
-          <span class="logo-text">Vaktify</span>
+          <span class="logo-text">Vectify</span>
         </div>
 
         <div class="sidebar-nav">
@@ -868,7 +868,7 @@ function renderFeed() {
 
         <div style="padding: 12px; font-size: 0.75rem; color: var(--text-muted); line-height: 1.6;">
           <a href="#">Terms</a> · <a href="#">Privacy</a> · <a href="#">Cookies</a><br/>
-          © 2026 Vaktify. All rights reserved.
+          © 2026 Vectify. All rights reserved.
         </div>
       </aside>
     </div>

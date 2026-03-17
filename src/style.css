@@ -1,5 +1,5 @@
 /* ========================================
-   VAKTIFY DESIGN SYSTEM
+   VECTIFY DESIGN SYSTEM
    Space-themed colors (not too dark)
    ======================================== */
 
@@ -816,22 +816,23 @@ textarea.input-field {
 
 .hero-content h1 {
   font-family: var(--font-display);
-  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-size: clamp(2.5rem, 6vw, 5rem);
   font-weight: 900;
-  line-height: 1.1;
-  margin-bottom: 20px;
+  line-height: 1.05;
+  margin-bottom: 24px;
   background: var(--gradient-brand);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  letter-spacing: -0.02em;
 }
 
 .hero-content p {
   font-size: 1.15rem;
   color: var(--text-secondary);
-  max-width: 500px;
-  margin: 0 auto 40px;
-  line-height: 1.7;
+  max-width: 520px;
+  margin: 0 auto 44px;
+  line-height: 1.8;
 }
 
 .hero-actions {
@@ -852,9 +853,22 @@ textarea.input-field {
 .hero-feature {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   color: var(--text-secondary);
   font-size: 0.9rem;
+  padding: 12px 20px;
+  border-radius: var(--radius-lg);
+  background: rgba(30, 29, 53, 0.5);
+  border: 1px solid var(--border-subtle);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: all var(--transition-base);
+}
+
+.hero-feature:hover {
+  border-color: var(--border-active);
+  background: rgba(30, 29, 53, 0.7);
+  transform: translateY(-2px);
 }
 
 .hero-feature-icon {
@@ -1247,7 +1261,8 @@ textarea.input-field {
 
 .nav-item.active {
   color: var(--accent-primary-light);
-  background: rgba(124, 108, 255, 0.12);
+  background: rgba(151, 125, 255, 0.15);
+  font-weight: 600;
 }
 
 .nav-item .nav-icon {
@@ -1347,6 +1362,7 @@ textarea.input-field {
   border-bottom: 1px solid var(--border-subtle);
   display: flex;
   gap: 14px;
+  background: rgba(30, 29, 53, 0.3);
 }
 
 .compose-input {
@@ -1411,7 +1427,7 @@ textarea.input-field {
 }
 
 .post-card:hover {
-  background: rgba(124, 108, 255, 0.03);
+  background: rgba(151, 125, 255, 0.04);
 }
 
 .post-header {
@@ -1687,11 +1703,11 @@ textarea.input-field {
 }
 
 .follow-btn {
-  padding: 6px 16px;
+  padding: 6px 18px;
   border-radius: var(--radius-full);
   font-size: 0.8rem;
-  font-weight: 600;
-  background: white;
+  font-weight: 700;
+  background: var(--text-primary);
   color: var(--bg-primary);
   cursor: pointer;
   border: none;
@@ -1699,8 +1715,9 @@ textarea.input-field {
 }
 
 .follow-btn:hover {
-  background: var(--accent-primary-light);
+  background: var(--accent-primary);
   color: white;
+  transform: scale(1.03);
 }
 
 /* ---------- Comment Section ---------- */
