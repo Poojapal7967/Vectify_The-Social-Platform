@@ -265,6 +265,10 @@ function render() {
       app.innerHTML = renderFeed();
       initFeed();
       break;
+    case 'profile':
+      app.innerHTML = renderProfile();
+      initProfile();
+      break;
     default:
       app.innerHTML = renderLanding();
       initLanding();
@@ -892,6 +896,84 @@ function renderFeed() {
   `;
 }
 
+function renderProfile() {
+  const user = STATE.user;
+  if (!user) {
+    return `
+      <div class="cosmic-bg"></div>
+      <div class="profile-container slide-up" style="text-align: center;">
+        <h1 style="margin-bottom: 12px;">Profile not available</h1>
+        <p style="color: var(--text-secondary); margin-bottom: 20px;">Please log in to view your profile.</p>
+        <button class="btn btn-primary" id="profile-go-landing">Go to landing</button>
+      </div>
+    `;
+  }
+
+  const userPosts = STATE.posts.filter(post => post.handle === user.handle);
+  const postCount = Math.max(user.posts || 0, userPosts.length);
+  const profileBio = user.bio?.trim() || 'Your profile is ready. Start sharing your orbit with the world ✨';
+
+  return `
+    <div class="cosmic-bg"></div>
+    ${generateStars(70)}
+
+    <div class="profile-container profile-page slide-up">
+      <div class="profile-banner"></div>
+
+      <div class="profile-info-section">
+        <div class="avatar" style="background: ${getAvatarGradient(user.avatar)}">${user.avatar || 'U'}</div>
+        <div class="profile-details">
+          <h1>${user.name}</h1>
+          <div class="handle">${user.handle}</div>
+          <p class="profile-bio">${profileBio}</p>
+          <div class="profile-stats">
+            <div class="profile-stat"><strong>${formatNumber(postCount)}</strong> Posts</div>
+            <div class="profile-stat"><strong>${formatNumber(user.followers || 0)}</strong> Followers</div>
+            <div class="profile-stat"><strong>${formatNumber(user.following || 0)}</strong> Following</div>
+          </div>
+          <div style="display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap;">
+            <button class="btn btn-secondary btn-sm" id="profile-edit-btn">Edit Profile</button>
+            <button class="btn btn-primary btn-sm" id="profile-back-btn">Back to Feed</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass" style="padding: 18px; border-radius: var(--radius-lg); margin: 0 24px 24px;">
+        <h3 style="font-family: var(--font-display); margin-bottom: 12px;">Your Posts</h3>
+        ${userPosts.length ? `
+          <div class="posts-grid-layout">
+            ${userPosts.map(post => `
+              <div class="grid-post-item">
+                <div style="padding: 12px; height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
+                  <span style="font-size: 0.75rem; color: var(--accent-secondary);">${post.topic}</span>
+                  <span style="font-size: 0.85rem; color: var(--text-secondary);">${timeAgo(post.time)}</span>
+                </div>
+                <div class="post-overlay">
+                  <span>❤️ ${formatNumber(post.likes)}</span>
+                  <span>💬 ${formatNumber(post.comments)}</span>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        ` : `
+          <p style="color: var(--text-secondary); font-size: 0.9rem;">No posts yet. Create your first post from the feed 🚀</p>
+        `}
+      </div>
+    </div>
+  `;
+}
+
+function initProfile() {
+  const backBtn = $('#profile-back-btn');
+  if (backBtn) backBtn.addEventListener('click', () => navigate('feed'));
+
+  const editBtn = $('#profile-edit-btn');
+  if (editBtn) editBtn.addEventListener('click', () => navigate('profile-setup'));
+
+  const goLandingBtn = $('#profile-go-landing');
+  if (goLandingBtn) goLandingBtn.addEventListener('click', () => navigate('landing'));
+}
+
 
 function getFeedPostsByTab() {
   if (STATE.feedTab === 'following') {
@@ -1011,11 +1093,22 @@ function initFeed() {
   // Nav items
   $$('.nav-item').forEach(item => {
     item.addEventListener('click', () => {
+      const page = item.dataset.page;
+      if (page === 'home') return;
+      if (page === 'profile') {
+        navigate('profile');
+        return;
+      }
       $$('.nav-item').forEach(i => i.classList.remove('active'));
       item.classList.add('active');
       showToast(`${item.querySelector('.nav-label')?.textContent || 'Page'} — Coming soon! 🚧`, 'info');
     });
   });
+
+  const sidebarProfileBtn = $('#sidebar-profile-btn');
+  if (sidebarProfileBtn) {
+    sidebarProfileBtn.addEventListener('click', () => navigate('profile'));
+  }
 
   
 // initFeed() ke andar ye logic add karein:
